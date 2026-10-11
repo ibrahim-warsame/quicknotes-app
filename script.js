@@ -5,8 +5,10 @@ const categorySelect = document.querySelector("#note-category");
 const list = document.querySelector("#notes-list");
 const count = document.querySelector("#note-count");
 const errorMessage = document.querySelector("#error-message");
+const searchInput = document.querySelector("#search-input");
 
 const MAX_LENGTH = 200;
+const STORAGE_KEY = "quicknotes";
 
 const CATEGORY_LABELS = {
   personal: "Personal",
@@ -15,13 +17,56 @@ const CATEGORY_LABELS = {
 };
 
 // ---------- 2. The data: one array is the single source of truth ----------
-let notes = [];
+let notes = loadNotes();
+
+function loadNotes() {
+  const saved = localStorage.getItem(STORAGE_KEY); // null if nothing saved yet
+  if (saved === null) return [];
+
+  try {
+    const parsed = JSON.parse(saved);
+    if (!Array.isArray(parsed)) return [];
+
+    // keep only well-formed notes (the user can edit localStorage in DevTools)
+    return parsed.filter(
+      (note) =>
+        note &&
+        typeof note.id === "number" &&
+        typeof note.text === "string" &&
+        Object.hasOwn(CATEGORY_LABELS, note.category)
+    );
+  } catch (error) {
+    return []; // the saved text was damaged, so start fresh
+  }
+}
+
+function saveNotes() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(notes));
+}
 
 // ---------- 3. Draw the notes on the page ----------
+// A note matches when it contains every word typed in the search box
+function matchesSearch(note, searchText) {
+  const words = searchText.toLowerCase().split(/\s+/).filter(Boolean);
+  const noteText = note.text.toLowerCase();
+  return words.every((word) => noteText.includes(word));
+}
+
 function render() {
   list.replaceChildren(); // clear the old list
 
-  notes.forEach((note) => {
+  const visibleNotes = notes.filter((note) =>
+    matchesSearch(note, searchInput.value)
+  );
+
+  if (notes.length > 0 && visibleNotes.length === 0) {
+    const empty = document.createElement("li");
+    empty.classList.add("no-results");
+    empty.textContent = "No notes match your search.";
+    list.appendChild(empty);
+  }
+
+  visibleNotes.forEach((note) => {
     const li = document.createElement("li");
     li.classList.add("note", `category-${note.category}`);
 
@@ -89,11 +134,13 @@ function addNote(text, category) {
     category: category,
     createdAt: formatDate(new Date()),
   });
+  saveNotes();
   render();
 }
 
 function deleteNote(id) {
   notes = notes.filter((note) => note.id !== id);
+  saveNotes();
   render();
 }
 
@@ -126,6 +173,9 @@ form.addEventListener("submit", (event) => {
   input.value = "";
   input.focus();
 });
+
+// Search: redraw the list on every keystroke in the search box
+searchInput.addEventListener("input", render);
 
 // ---------- 7. Draw once when the page first loads ----------
 render();
