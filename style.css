@@ -1,0 +1,245 @@
+/* ---------- Reset and base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f4f6f8;
+  color: #222;
+  line-height: 1.5;
+}
+
+/* ---------- Header ---------- */
+header {
+  background-color: #14394d;
+  color: white;
+  text-align: center;
+  padding: 28px 16px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.25rem;
+}
+
+header p {
+  margin: 4px 0 0;
+}
+
+/* ---------- Main area: centred column with white cards ---------- */
+main {
+  max-width: 700px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: white;
+  font: inherit;
+}
+
+/* ---------- Form: Flexbox ---------- */
+#note-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#note-form label {
+  width: 100%;
+}
+
+#note-input {
+  flex: 1;
+}
+
+#note-category {
+  flex: 1;
+}
+
+/* ---------- Buttons ---------- */
+button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  background-color: #0a7f69;
+  color: white;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #086552;
+  transform: translateY(-1px);
+}
+
+/* ---------- Error message ---------- */
+#error-message {
+  min-height: 1.5em;
+  margin: 8px 0 0;
+  color: #c00000;
+  font-weight: bold;
+}
+
+/* ---------- Search and count ---------- */
+#search-input {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+}
+
+#note-count {
+  margin: 12px 0;
+  color: #555;
+}
+
+/* ---------- Notes list: each note is a card ---------- */
+#notes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.note {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-left: 6px solid #999;
+  border-radius: 8px;
+}
+
+.note-text {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.note-meta {
+  margin: 4px 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.category-label {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.delete-btn {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  background-color: #8e0000;
+  font-size: 0.85rem;
+}
+
+.delete-btn:hover {
+  background-color: #6b0000;
+}
+
+.no-results {
+  color: #666;
+  font-style: italic;
+}
+
+/* ---------- One look per category ---------- */
+.category-personal {
+  border-left-color: #0ba184;
+}
+
+.category-personal .category-label {
+  background-color: #d9f4ee;
+  color: #066e5c;
+}
+
+.category-work {
+  border-left-color: #8e0000;
+}
+
+.category-work .category-label {
+  background-color: #f8dcdc;
+  color: #8e0000;
+}
+
+.category-study {
+  border-left-color: #1e5fbf;
+}
+
+.category-study .category-label {
+  background-color: #dce8fa;
+  color: #174a96;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  text-align: center;
+  color: #777;
+  padding: 16px;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* ---------- Phones: stack the form vertically ---------- */
+@media (max-width: 600px) {
+  header {
+    padding: 20px 12px;
+  }
+
+  header h1 {
+    font-size: 1.75rem;
+  }
+
+  #note-form {
+    flex-direction: column;
+  }
+
+  #note-input,
+  #note-category {
+    flex: none;
+    width: 100%;
+  }
+
+  #note-form button {
+    width: 100%;
+  }
+
+  .note {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
